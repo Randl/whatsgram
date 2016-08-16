@@ -57,13 +57,13 @@ def main():
     # Create the EventHandler and pass it your bot's token.
     with open("token", "r") as token_file:
         token = token_file.readline()
-    print(token)
+
     updater = Updater(token)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
-    # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
+    # Add conversation handler with the states PHONE_NUMBER, CONFIRMATION_CODE
     conv_handler = ConversationHandler(entry_points=[CommandHandler('start', start)],
 
                                        states={PHONE_NUMBER: [MessageHandler([Filters.text], phone_number)],
