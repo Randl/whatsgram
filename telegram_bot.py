@@ -4,6 +4,7 @@ from telegram import (ReplyKeyboardMarkup, ParseMode)  # pip install python-tele
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, RegexHandler)
 
 from phonenumber_parse import get_prefix
+from whatsapp_reg import requestCode
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -24,20 +25,22 @@ def start(bot, update):
     return PHONE_NUMBER
 
 
-prefix = ''
+country_code = ''
+phonenum = ''
 def phone_number(bot, update):
     user = update.message.from_user
+    global phonenum  # TODO: db
     phonenum = update.message.text
     logger.info('Phone number of user {}: {}'.format(user.id, update.message.text))
-    global prefix
-    prefix = get_prefix(phonenum)
-    if prefix == '':
-        bot.sendMessage(update.message.chat_id, text='Sorry, you entered non-valid number. Please, try again.')
+    global country_code
+    country_code = get_prefix(phonenum)
+    if country_code == '':
+        bot.sendMessage(update.message.chat_id, text='Sorry, you entered invalid number. Please, try again.')
         return PHONE_NUMBER
 
     reply_keyboard = [['Yes', 'No']]
 
-    bot.sendMessage(update.message.chat_id, text='Is *{}* your country prefix?'.format(prefix),
+    bot.sendMessage(update.message.chat_id, text='Is *{}* your country code?'.format(country_code),
                     reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True),
                     parse_mode=ParseMode.MARKDOWN)
     return PREFIX_CONFIRM
@@ -46,32 +49,42 @@ def phone_number(bot, update):
 def prefix_confirm(bot, update):
     user = update.message.from_user
     if (update.message.text == 'Yes'):
-        logger.info('Prefix of user {} confirmed: {}'.format(user.id, prefix))
-        bot.sendMessage(update.message.chat_id, text='Now please give me a confirmation code, so I can'
+        logger.info('Prefix of user {} confirmed: {}'.format(user.id, country_code))
+
+        bot.sendMessage(update.message.chat_id, text='Now please give me a confirmation code, so I can '
                                                  'log into your WhatsApp account.')
+        requestCode(phonenum, country_code)
         return CONFIRMATION_CODE
     else:
-        logger.info('Prefix of user {} is wrong'.format(user.id, prefix))
-        bot.sendMessage(update.message.chat_id, text='What is your country prefix?')
+        logger.warning('Country code of user {} is wrong. Number: {}'.format(user.id, country_code, phonenum))
+        bot.sendMessage(update.message.chat_id, text='What is your country code?')
         return PREFIX_MANUAL
 
 
 def prefix_manual(bot, update):
     user = update.message.from_user
-    global prefix
-    prefix = update.message.text
-    logger.info('Prefix of user {} is {}'.format(user.id, prefix))
+    global country_code
+    country_code = update.message.text
+    logger.info('Prefix of user {} is {}'.format(user.id, country_code))
 
-    bot.sendMessage(update.message.chat_id, text='Now please give me a confirmation code, so I can'
+    requestCode(phonenum, country_code)  # TODO: error handling
+    bot.sendMessage(update.message.chat_id, text='Now please give me a confirmation code, so I can '
                                                  'log into your WhatsApp account.')
     return CONFIRMATION_CODE
 
 def confirmation_code(bot, update):
     user = update.message.from_user
-    logger.info('Confirmation code of user {}: {}'.format(user.id, update.message.text))
-    bot.sendMessage(update.message.chat_id, text='Thank you! Now you can start using me.')
+    code = update.message.text
+    logger.info('Confirmation code of user {}: {}'.format(user.id, code))
+    code = code.replace('-', '')
+    if len(code) == 6 and code.isdigit():
+        bot.sendMessage(update.message.chat_id, text='Thank you! Now you can start using me.')
 
-    return ConversationHandler.END
+        return ConversationHandler.END
+    else:
+        bot.sendMessage(update.message.chat_id, text='Sorry, the code you entered is invalid.\n'
+                                                     'Confirmation code consists of 6 digits. Please, try again:')
+        return CONFIRMATION_CODE
 
 
 def cancel(bot, update):
