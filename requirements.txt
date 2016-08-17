@@ -1,0 +1,3 @@
+phonenumbers
+python-telegram-bot
+yowsup2
