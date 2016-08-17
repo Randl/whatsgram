@@ -3,13 +3,17 @@
 #
 # A Bot to integrate WhatsApp with Telegram
 
-from telegram_bot import *
+import logging
+import wgcore.main
+import sys
 
+def setupLogging():
+    consoleHandler = logging.StreamHandler(stream=sys.stdout)
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO, handlers=[consoleHandler])
 
 def main():
-    run_telegram_bot()
-
-
+    setupLogging()
+    wgcore.main.runWhatsgram()
 
 if __name__ == '__main__':
     main()
