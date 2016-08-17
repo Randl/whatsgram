@@ -1,3 +1,4 @@
+import datetime
 import logging
 import threading
 from time import sleep
@@ -13,9 +14,40 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 
+def decode_message(message):
+    """
+    Decodes message
+    :param message: raw message
+    :return: Dictionary with four fields: date, id, from and message
+    """
+    if message.getType() == 'text':
+        # self.output(message.getBody(), tag = '%s [%s]'%(message.getFrom(), formattedDate))
+        message_body = message.getBody()
+    elif message.getType() == 'media':
+        if message.getMediaType() in ("image", "audio", "video"):
+            message_body = {'type': message.getMediaType(), 'size': message.getMediaSize(),
+                            'url': message.getMediaUrl()}
+        elif message.getMediaType() == 'vcard':
+            message_body = {'name': message.getName(), 'vcard': message.getCardData()}
+        elif message.getMediaType() == 'location':
+            message_body = {'latitude': message.getLatitude(), 'longitude': message.getLongitude()}
+        else:
+            message_body = 'Unknown media type: {}'.format(message.getMediaType())
+            logger.error('Unknown media type {} for message {} '.format(message.getMediaType(), message))
+    else:
+        message_body = 'Unknown message type {} '.format(message.getType())
+        logger.error('Unknown message type {} for message {} '.format(message.getType(), message))
+
+    formattedDate = datetime.datetime.fromtimestamp(message.getTimestamp()).strftime('%d-%m-%Y %H:%M:%S')
+    sender = message.getFrom() if not message.isGroupMessage() else "{}/{}".format(message.getParticipant(False),
+                                                                                   message.getFrom())
+    output = {'date': formattedDate, 'id': message.getId(), 'from': sender, 'message': message_body}
+    return output
+
+
 class WhatsApp:
     def __init__(self, read=False):
-
+        # TODO: user/.yowsup/phonenumber/axolotl.db must be removed if someone changed device, else untrusted identity
         self.read_notify = read
 
         self.echoLayer = EchoLayer()
@@ -65,11 +97,9 @@ class WhatsApp:
 if __name__ == '__main__':
     w = WhatsApp(True)
     while True:
-        w.send_message('972586486400', 'how r you')
         x = w.get_messages()
         if len(x) != 0:
             for m in x:
-                print("{}: {}".format(m.getFrom(), m.getBody()))
-        else:
+                print("{}".format(decode_message(m)))
             print("no new messages")
         sleep(10)
