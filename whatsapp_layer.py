@@ -20,11 +20,11 @@ class EchoLayer(YowInterfaceLayer):
     @ProtocolEntityCallback("message")
     def onMessage(self, message):
         if message.getType() == 'text':
-            self.message_list.append((message.getFrom(), message.getBody()))
-        # send receipt otherwise we keep receiving the same message over and over
-        # receipt = OutgoingReceiptProtocolEntity(messageProtocolEntity.getId(), messageProtocolEntity.getFrom())
-        # self.toLower(receipt)
-        self.toLower(message.ack(True))
+            self.message_list.append(message)
+
+        # send receipt
+        self.toLower(message.ack(False))
+
         logger.info("Message received")
 
     @ProtocolEntityCallback("receipt")
@@ -34,15 +34,15 @@ class EchoLayer(YowInterfaceLayer):
 
     def send_message(self, phone, message):
         self.lock.acquire()
-        if '@' in phone:
+        if '@' in phone:  # full adress
             entity = TextMessageProtocolEntity(message, to=phone)
-        elif '-' in phone:
-            entity = TextMessageProtocolEntity(message, to="%s@g.us" % phone)
-        else:
-            entity = TextMessageProtocolEntity(message, to="%s@s.whatsapp.net" % phone)
+        elif '-' in phone:  # group
+            entity = TextMessageProtocolEntity(message, to="{}@g.us".format(phone))
+        else:  # number only
+            entity = TextMessageProtocolEntity(message, to="{}@s.whatsapp.net".format(phone))
+
         self.ackQueue.append(entity.getId())
         self.toLower(entity)
-        logger.info("Message sent")
         self.lock.release()
 
     @ProtocolEntityCallback("ack")
