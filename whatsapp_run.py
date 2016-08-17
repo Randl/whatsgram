@@ -25,7 +25,7 @@ def decode_message(message):
         message_body = message.getBody()
         m_type = 'text'
     elif message.getType() == 'media':
-        if message.getMediaType() in ("image", "audio", "video"):
+        if message.getMediaType() in ('image', 'audio', 'video'):
             message_body = {'type': message.getMediaType(), 'size': message.getMediaSize(),
                             'url': message.getMediaUrl()}
             m_type = 'downloadable_media'
@@ -43,7 +43,7 @@ def decode_message(message):
         logger.error('Unknown message type {} for message {} '.format(message.getType(), message))
 
     formattedDate = datetime.datetime.fromtimestamp(message.getTimestamp()).strftime('%d-%m-%Y %H:%M:%S')
-    sender = message.getFrom() if not message.isGroupMessage() else "{}/{}".format(message.getParticipant(False),
+    sender = message.getFrom() if not message.isGroupMessage() else '{}/{}'.format(message.getParticipant(False),
                                                                                    message.getFrom())
     output = {'date': formattedDate, 'id': message.getId(), 'from': sender, 'message': message_body, 'type': m_type}
     return output
@@ -59,7 +59,7 @@ class WhatsApp:
         self.stack = stackBuilder.pushDefaultLayers(True).push(self.echoLayer).build()
 
         config = {}
-        with open("config", "r") as config_file:
+        with open('config', 'r') as config_file:
             for line in config_file:
                 (key, val) = line.split(' ')
                 config[key] = val.strip()
@@ -74,7 +74,7 @@ class WhatsApp:
         self.thread.start()
 
     def stop(self):
-        logger.info("Stoping loop")  # TODO:
+        logger.info('Stoping loop')  # TODO:
         self.thread.join()
 
     def send_message(self, destination, message):
@@ -83,7 +83,7 @@ class WhatsApp:
         send_message('11133434343','hello')
         """
         self.echoLayer.send_message(destination, message)
-        logger.info("Exiting message sending function")
+        logger.info('Exiting message sending function')
 
     def get_messages(self):
         """
@@ -94,7 +94,7 @@ class WhatsApp:
             for mess in tmp:
                 self.echoLayer.toLower(mess.ack(True))
         self.echoLayer.message_list.clear()
-        logger.info("Exiting message receiving function")
+        logger.info('Exiting message receiving function')
         return tmp
 
 
@@ -104,6 +104,6 @@ if __name__ == '__main__':
         x = w.get_messages()
         if len(x) != 0:
             for m in x:
-                print("{}".format(decode_message(m)))
-            print("no new messages")
+                print('{}'.format(decode_message(m)))
+            print('no new messages')
         sleep(10)

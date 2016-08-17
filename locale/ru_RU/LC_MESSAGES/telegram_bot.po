@@ -1,0 +1,96 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:20
+msgid "User {}({} aka {} {}) starts conversation."
+msgstr "Пользователь {}({} по имени {} {}) начал общение."
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:22
+msgid ""
+"Hi! I'm a WhatsGram bot. I can forward your messages to WhatsApp and send your WhatsApp messages here.\n"
+"\n"
+"First, what's your phone number linked to WhatsApp account?"
+msgstr ""
+"Привет! Я бот WhatsGram. Я могу передавать сообщения в WhatsApp и присылать сюда ваши сообщения из WhatsApp.\n"
+"\n"
+"Для начала, скажите свой номер телефона. привязанный к аккаунту WhatsApp"
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:34
+msgid "Phone number of user {}: {}"
+msgstr  "Phone number of user {}: {}"
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:38
+msgid "Sorry, you entered invalid number. Please, try again."
+msgstr "Sorry, you entered invalid number. Please, try again."
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:41
+msgid "No"
+msgstr "No"
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:41
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:51
+msgid "Yes"
+msgstr "Yes"
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:43
+msgid "Is *{}* your country code?"
+msgstr "Is *{}* your country code?"
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:52
+msgid "Prefix of user {} confirmed: {}"
+msgstr "Prefix of user {} confirmed: {}"
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:54
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:71
+msgid "Now please give me a confirmation code, so I can log into your WhatsApp account."
+msgstr "Now please give me a confirmation code, so I can log into your WhatsApp account."
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:59
+msgid "Country code of user {} is wrong. Number: {}"
+msgstr "Country code of user {} is wrong. Number: {}"
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:60
+msgid "What is your country code?"
+msgstr "What is your country code?"
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:68
+msgid "Prefix of user {} is {}"
+msgstr "Prefix of user {} is {}"
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:78
+msgid "Confirmation code of user {}: {}"
+msgstr "Confirmation code of user {}: {}"
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:81
+msgid "Thank you! Now you can start using me."
+msgstr "Thank you! Now you can start using me."
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:85
+msgid ""
+"Sorry, the code you entered is invalid.\n"
+"Confirmation code consists of 6 digits. Please, try again:"
+msgstr ""
+"Sorry, the code you entered is invalid.\n"
+"Confirmation code consists of 6 digits. Please, try again:"
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:92
+msgid "User {} canceled the conversation."
+msgstr "User {} canceled the conversation."
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:93
+msgid "Bye! I hope we can talk again some day."
+msgstr "Bye! I hope we can talk again some day."
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:99
+msgid "Update '{}' caused error '{}'"
+msgstr "Update '{}' caused error '{}'"
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:103
+msgid "bot print"
+msgstr "bot print"
+
+#: C:\Users\eabes\PycharmProjects\whatsgram\telegram_bot.py:123
+msgid "^(Yes|No)$"
+msgstr "^(Yes|No)$"
+

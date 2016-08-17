@@ -19,11 +19,11 @@ class EchoLayer(YowInterfaceLayer):
 
     @ProtocolEntityCallback('message')
     def onMessage(self, message):
-        '''
+        """
         When new message arrives, adds it to message list and sends receipt.
         :param message: new message
         :return: void
-        '''
+        """
 
         self.message_list.append(message)
 
@@ -38,12 +38,12 @@ class EchoLayer(YowInterfaceLayer):
         self.toLower(ack)
 
     def send_message(self, phone, message):
-        '''
+        """
         Sends message
         :param phone: Recipient of the message (phone or phone-group)
         :param message: Message to send
         :return: void
-        '''
+        """
         self.lock.acquire()
         if '@' in phone:  # full adress
             entity = TextMessageProtocolEntity(message, to=phone)
