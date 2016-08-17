@@ -6,7 +6,7 @@ from yowsup.layers.protocol_acks.protocolentities import OutgoingAckProtocolEnti
 from yowsup.layers.protocol_messages.protocolentities import TextMessageProtocolEntity
 
 # Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+# logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -19,11 +19,11 @@ class EchoLayer(YowInterfaceLayer):
 
     @ProtocolEntityCallback('message')
     def onMessage(self, message):
-        '''
+        """
         When new message arrives, adds it to message list and sends receipt.
         :param message: new message
         :return: void
-        '''
+        """
 
         self.message_list.append(message)
 
@@ -38,12 +38,12 @@ class EchoLayer(YowInterfaceLayer):
         self.toLower(ack)
 
     def send_message(self, phone, message):
-        '''
+        """
         Sends message
         :param phone: Recipient of the message (phone or phone-group)
         :param message: Message to send
         :return: void
-        '''
+        """
         self.lock.acquire()
         if '@' in phone:  # full adress
             entity = TextMessageProtocolEntity(message, to=phone)

@@ -1,7 +1,13 @@
 import logging
+
 from telegram import (ReplyKeyboardMarkup, ParseMode)  # pip install python-telegram-bot
-from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, RegexHandler)
-from phonenumber_parse import get_prefix
+from telegram.ext import (CommandHandler, MessageHandler, Filters, ConversationHandler, RegexHandler)
+
+from wgcore.phonenumber_parse import get_prefix
+from wgwhatsapp.wa_registration import requestCode, register
+
+# temporary workaround for localization
+_ = lambda x: x
 
 PHONE_NUMBER, PREFIX_CONFIRM, PREFIX_MANUAL, CONFIRMATION_CODE = range(4)
 

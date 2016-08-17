@@ -3,7 +3,7 @@ import logging
 from yowsup.registration import WACodeRequest, WARegRequest
 
 # Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+# logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -28,3 +28,4 @@ def register(phone_num, country_code, code):
     result = req.send()
     print(answerToStr(result))
     logger.info('Registration performed for number {}{}'.format(country_code, phone_num))
+    return result['pw']
