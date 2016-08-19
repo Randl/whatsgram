@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class WABot:
-    def __init__(self, read=False):
+    def __init__(self, num, token, read=False):
         # TODO: user/.yowsup/phonenumber/axolotl.db must be removed if someone changed device, else untrusted identity
         self.read_notify = read
 
@@ -21,14 +21,10 @@ class WABot:
         stackBuilder = YowStackBuilder()
         self.stack = stackBuilder.pushDefaultLayers(True).push(self.echoLayer).build()
 
-        config = {}
-        with open('config', 'r') as config_file:
-            for line in config_file:
-                (key, val) = line.split(' ')
-                config[key] = val.strip()
+
         # credentials
-        self.credentials = (config['whatsupnum'], config['whatsuppass'].encode())
-        logger.info('Connecting as {}'.format(config['whatsupnum']))
+        self.credentials = (num, token)
+        logger.info('Connecting as {}'.format(num))
 
         self.stack.setCredentials(self.credentials)
 
