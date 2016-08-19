@@ -1,7 +1,13 @@
 import logging
+
 from telegram import (ReplyKeyboardMarkup, ParseMode)  # pip install python-telegram-bot
-from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, RegexHandler)
-from phonenumber_parse import get_prefix
+from telegram.ext import (CommandHandler, MessageHandler, Filters, ConversationHandler, RegexHandler)
+
+from wgcore.phonenumber_parse import get_cc_and_number
+from wgwhatsapp.wa_registration import requestCode, register
+
+# temporary workaround for localization
+_ = lambda x: x
 
 PHONE_NUMBER, PREFIX_CONFIRM, PREFIX_MANUAL, CONFIRMATION_CODE = range(4)
 
@@ -37,7 +43,8 @@ def register(bot, update):
     bot.sendMessage(update.message.chat_id,
                     text='Hi! I\'m a WhatsGram bot. I can forward your messages to WhatsApp and send your WhatsApp '
                          'messages here.\n\n'
-                         'First, what\'s your phone number linked to WhatsApp account?')
+                         'First, what\'s your phone number linked to WhatsApp account? Enter it in international'
+                         ' format, starting with \'+\' and international code.')
 
     return PHONE_NUMBER
 
@@ -50,7 +57,7 @@ def phone_number(bot, update):
     phonenum = update.message.text
     logger.info('Phone number of user {}: {}'.format(user.id, update.message.text))
     global country_code
-    country_code = get_prefix(phonenum)
+    [country_code, phonenum] = get_cc_and_number(phonenum)
     if country_code == '':
         bot.sendMessage(update.message.chat_id, text='Sorry, you entered invalid number. Please, try again.')
         return PHONE_NUMBER
