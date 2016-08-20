@@ -9,6 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 class VCardMessage(Message):
-    def __init__(self, text='', date=datetime.datetime.now(), id='', sender='', group='', vcard=''):
-        super(VCardMessage, self).__init__(text, date, id, sender)
+    def __init__(self, text='', date=datetime.datetime.now(), id='', sender='', conversation='', vcard=''):
+        super(VCardMessage, self).__init__(text, date, id, sender, conversation)
         self.vcard = vcard

@@ -7,9 +7,9 @@ logger = logging.getLogger(__name__)
 
 
 class Message:
-    def __init__(self, text='', date=datetime.datetime.now(), id='', sender='', group=''):
+    def __init__(self, text='', date=datetime.datetime.now(), id='', sender='', conversation=''):
         self.text = text
         self.date = date
         self.id = id
         self.sender = sender
-        self.group = group
+        self.conversation = conversation  # TODO: conversation

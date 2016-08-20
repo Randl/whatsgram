@@ -17,13 +17,14 @@ def decode_raw_whasapp_message(self, message):
 
     message_date = datetime.datetime.fromtimestamp(message.getTimestamp())  # .strftime('%d-%m-%Y %H:%M:%S')
     sender = message.getFrom() if not message.isGroupMessage() else message.getParticipant(False)
-    group = '' if not message.isGroupMessage() else message.getFrom()
+    group = '' if not message.isGroupMessage() else message.getFrom()  # TODO get conversation number from database
+    # instead
     if message.getType() == 'text':
         # self.output(message.getBody(), tag = '%s [%s]'%(message.getFrom(), formattedDate))
         result = mess.Message(message.getBody(), message_date, message.getId(), sender, group)
     elif message.getType() == 'media':
         if message.getMediaType() in ('image', 'audio', 'video'):
-            result = mess.MediaMessage(message.getBody(), message_date, message.getId(), sender, group,
+            result = mess.mediamessage(message.getBody(), message_date, message.getId(), sender, group,
                                        message.getMediaType(), message.getMediaSize(), message.getMediaUrl())
         elif message.getMediaType() == 'vcard':
             result = mess.VCardMessage(message.getBody(), message_date, message.getId(), sender, group,
