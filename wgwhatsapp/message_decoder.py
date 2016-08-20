@@ -1,7 +1,10 @@
 import datetime
 import logging
 
-import wgcore.message as mess
+from wgcore.message.locationmessage import LocationMessage
+from wgcore.message.mediamessage import MediaMessage
+from wgcore.message.message import Message
+from wgcore.message.vcardmessage import VCardMessage
 
 # Enable logging
 # logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -21,20 +24,20 @@ def decode_raw_whasapp_message(self, message):
     # instead
     if message.getType() == 'text':
         # self.output(message.getBody(), tag = '%s [%s]'%(message.getFrom(), formattedDate))
-        result = mess.Message(message.getBody(), message_date, message.getId(), sender, group)
+        result = Message(message.getBody(), message_date, message.getId(), sender, group)
     elif message.getType() == 'media':
         if message.getMediaType() in ('image', 'audio', 'video'):
-            result = mess.mediamessag(message.getBody(), message_date, message.getId(), sender, group,
-                                      message.getMediaType(), message.getMediaSize(), message.getMediaUrl())
+            result = MediaMessage(message.getBody(), message_date, message.getId(), sender, group,
+                                  message.getMediaType(), message.getMediaSize(), message.getMediaUrl())
         elif message.getMediaType() == 'vcard':
-            result = mess.VCardMessage(message.getBody(), message_date, message.getId(), sender, group,
-                                       message.getCardData())
+            result = VCardMessage(message.getBody(), message_date, message.getId(), sender, group,
+                                  message.getCardData())
         elif message.getMediaType() == 'location':
-            result = mess.LocationMessage(message.getBody(), message_date, message.getId(), sender, group,
-                                          message.getLongitude(), message.getLatitude())
+            result = LocationMessage(message.getBody(), message_date, message.getId(), sender, group,
+                                     message.getLongitude(), message.getLatitude())
         else:
-            result = mess.Message('Unknown media type: {}'.format(message.getMediaType()), message_date,
-                                  message.getId(), sender, group)
+            result = Message('Unknown media type: {}'.format(message.getMediaType()), message_date,
+                             message.getId(), sender, group)
             logger.error('Unknown media type {} for message {} '.format(message.getMediaType(), message))
     else:
         result = mess.Message('Unknown message type: {}'.format(message.getType()), message_date, message.getId(),

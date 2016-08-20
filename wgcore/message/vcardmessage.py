@@ -1,7 +1,7 @@
 import datetime
 import logging
 
-from wgcore.message import Message
+from wgcore.message.message import Message
 
 # Enable logging
 # logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
