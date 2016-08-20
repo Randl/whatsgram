@@ -24,8 +24,8 @@ def decode_raw_whasapp_message(self, message):
         result = mess.Message(message.getBody(), message_date, message.getId(), sender, group)
     elif message.getType() == 'media':
         if message.getMediaType() in ('image', 'audio', 'video'):
-            result = mess.mediamessage(message.getBody(), message_date, message.getId(), sender, group,
-                                       message.getMediaType(), message.getMediaSize(), message.getMediaUrl())
+            result = mess.mediamessag(message.getBody(), message_date, message.getId(), sender, group,
+                                      message.getMediaType(), message.getMediaSize(), message.getMediaUrl())
         elif message.getMediaType() == 'vcard':
             result = mess.VCardMessage(message.getBody(), message_date, message.getId(), sender, group,
                                        message.getCardData())
