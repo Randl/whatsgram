@@ -16,17 +16,18 @@ def answerToStr(result):
     return ''.join(out)
 
 
-def requestCode(phone_num, country_code):
-    codeReq = WACodeRequest(str(country_code), str(phone_num))
+def requestCode(country_code, phone_num, method='sms'):
+    codeReq = WACodeRequest(cc=str(country_code), p_in=str(phone_num), method=method)
     result = codeReq.send()
     print(answerToStr(result))
-    if result["status"] != "ok":
-        logger.warning('Code request for number {} failed. Request answer: {}'.format(result['login'], result))
+    if result["status"] != "sent":
+        logger.warning('Code request for number {}{} failed. Request answer:\n{}'.format(country_code, phone_num,
+                                                                                         answerToStr(result)))
     else:
-        logger.warning('Code requested for number {}'.format(result['login']))
+        logger.warning('Code requested for number {}{}'.format(country_code, phone_num))
 
 
-def register(phone_num, country_code, code):
+def register(country_code, phone_num, code):
     req = WARegRequest(str(country_code), str(phone_num), str(code))
     result = req.send()
     print(answerToStr(result))
@@ -34,5 +35,6 @@ def register(phone_num, country_code, code):
         logger.info('Registration for number {}'.format(result['login']))
         return result['pw']
     else:
-        logger.warning('Registration failed for number {}. Request answer: {}'.format(result['login'], result))
+        logger.warning('Registration failed for number {}{}. Request answer: {}'.format(country_code, phone_num,
+                                                                                        answerToStr(result)))
         return ''

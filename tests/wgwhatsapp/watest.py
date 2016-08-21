@@ -15,12 +15,17 @@ with open('config', 'r') as config_file:
         config[key] = val.strip()
 
 
-def test_reg():
+def test_reg(method='sms'):
     country_code = get_cc_and_number('+' + config['whatsupnum'])
-    requestCode(country_code[0], country_code[1])
+    logger.info('Code requesting for cc {}, number {}'.format(country_code[0], country_code[1]))
+    requestCode(country_code[0], country_code[1], method)
     code = input('Please enter the code: ')
-    config['whatsuppass'] = register(config['whatsupnum'], country_code[0], country_code[1])
+    config['whatsuppass'] = register(country_code[0], country_code[1], code)
 
 
 def test_bot():
     bot = WABot(config['whatsupnum'], config['whatsuppass'], True)
+
+
+# test_reg()
+test_bot()

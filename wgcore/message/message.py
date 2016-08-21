@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 class Message:
+    # TODO: str and repr
     def __init__(self, text='', date=datetime.datetime.now(), id='', sender='', conversation=''):
         self.text = text
         self.date = date

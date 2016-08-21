@@ -76,8 +76,10 @@ def prefix_confirm(bot, update):
         logger.info('Prefix of user {} confirmed: {}'.format(user.id, country_code))
 
         bot.sendMessage(update.message.chat_id, text='Now please give me a confirmation code, so I can '
-                                                 'log into your WhatsApp account.')
-        requestCode(phonenum, country_code)
+                                                     'log into your WhatsApp account. If you haven\'t got one '
+                                                     'please type /retry . You can try voice activation '
+                                                     'instead of sms as well by typing /voice')  # TODO: retry, voice
+        requestCode(country_code, phonenum)
         return CONFIRMATION_CODE
     else:
         logger.warning('Country code of user {} is wrong. Number: {}'.format(user.id, country_code, phonenum))
@@ -91,7 +93,7 @@ def prefix_manual(bot, update):
     country_code = update.message.text
     logger.info('Prefix of user {} is {}'.format(user.id, country_code))
 
-    requestCode(phonenum, country_code)  # TODO: error handling
+    requestCode(country_code, phonenum)  # TODO: error handling
     bot.sendMessage(update.message.chat_id, text='Now please give me a confirmation code, so I can '
                                                  'log into your WhatsApp account.')
     return CONFIRMATION_CODE
@@ -102,6 +104,7 @@ def confirmation_code(bot, update):
     logger.info('Confirmation code of user {}: {}'.format(user.id, code))
     code = code.replace('-', '')
     if len(code) == 6 and code.isdigit():
+        register(country_code, phonenum, code)
         bot.sendMessage(update.message.chat_id, text='Thank you! Now you can start using me.')
 
         return ConversationHandler.END
