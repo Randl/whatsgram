@@ -15,6 +15,7 @@ from wgcore.message.vcardmessage import VCardMessage
 logger = logging.getLogger(__name__)
 count = 0
 class DBInterface:
+    conversation_id = 0
     def __init__(self):
         self.db_filename = 'user_data.db'
         self.connection = sqlite3.connect(self.db_filename)
@@ -28,6 +29,9 @@ class DBInterface:
             'CREATE TABLE IF NOT EXISTS messages (id TEXT UNIQUE, conversation INTEGER NOT NULL, sender TEXT, '
             'timestamp INTEGER NOT NULL, type INTEGER NOT NULL, message_text TEXT, message BLOB)')
         self.connection.commit()
+        self.cursor.execute('SELECT MAX(id) AS last_id FROM conversations')
+        x = self.cursor.fetchone()
+        self.__class__.conversation_id = x[0] if x[0] is not None else 0
 
     def add_user(self, user_id, whatsapp_id):
         self.cursor.execute('INSERT INTO users VALUES (:user, :whatsapp)', {'user': user_id, 'whatsapp': whatsapp_id})
@@ -40,9 +44,10 @@ class DBInterface:
         self.cursor.execute('INSERT INTO conversations VALUES (:id, :user, :part)',
                             {'id': count, 'user': user_id, 'part': participant})
         self.connection.commit()
-        logger.info('Commiting changes to database {}. Conversation {} added'.format(self.db_filename, count))
-        count += 1
-        return count -1
+        logger.info('Commiting changes to database {}. Conversation {} added'.format(self.db_filename,
+                                                                                     self.__class__.conversation_id))
+        self.__class__.conversation_id += 1
+        return self.__class__.conversation_id - 1
 
     def add_message(self, conversation_id, message):
         if message is MediaMessage:
