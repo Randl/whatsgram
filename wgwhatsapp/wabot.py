@@ -21,7 +21,6 @@ class WABot:
         stackBuilder = YowStackBuilder()
         self.stack = stackBuilder.pushDefaultLayers(True).push(self.echoLayer).build()
 
-
         # credentials
         self.credentials = (num, token)
         logger.info('Connecting as {}'.format(num))

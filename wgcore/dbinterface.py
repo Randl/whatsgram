@@ -14,8 +14,11 @@ from wgcore.message.vcardmessage import VCardMessage
 
 logger = logging.getLogger(__name__)
 count = 0
+
+
 class DBInterface:
     conversation_id = 0
+
     def __init__(self):
         self.db_filename = 'user_data.db'
         self.connection = sqlite3.connect(self.db_filename)
@@ -95,19 +98,18 @@ class DBInterface:
             if message['type'] == 'media':
                 messages.append(MediaMessage(message['message_text'], message['id'],
                                              datetime.datetime.fromtimestamp(message['timestamp']),
-                                                message['conversation'], additional[0], additional[1], additional[2]))
+                                             message['conversation'], additional[0], additional[1], additional[2]))
             elif message['type'] == 'vcard':
                 messages.append(VCardMessage(message['message_text'], message['id'],
                                              datetime.datetime.fromtimestamp(message['timestamp']),
-                                                message['conversation'], additional[0]))
+                                             message['conversation'], additional[0]))
             elif message['type'] == 'location':
                 messages.append(LocationMessage(message['message_text'], message['id'],
                                                 datetime.datetime.fromtimestamp(message['timestamp']),
-                                                   message['conversation'], additional[0], additional[1]))
+                                                message['conversation'], additional[0], additional[1]))
             else:
                 messages.append(Message(message['message_text'], message['id'],
-                                        datetime.datetime.fromtimestamp(message['timestamp']),
-                                                       message['conversation']))
+                                        datetime.datetime.fromtimestamp(message['timestamp']), message['conversation']))
         return messages
 
     def open(self):
@@ -128,5 +130,6 @@ class DBInterface:
         self.cursor.execute(
             'CREATE TABLE IF NOT EXISTS conversations (id INTEGER NOT NULL UNIQUE, user TEXT, participant TEXT)')
         self.cursor.execute(
-            'CREATE TABLE IF NOT EXISTS messages (id TEXT UNIQUE, conversation INTEGER NOT NULL, sender TEXT, timestamp INTEGER NOT NULL, type INTEGER NOT NULL, message_text TEXT, message BLOB)')
+            'CREATE TABLE IF NOT EXISTS messages (id TEXT UNIQUE, conversation INTEGER NOT NULL, sender TEXT, timestamp'
+            ' INTEGER NOT NULL, type INTEGER NOT NULL, message_text TEXT, message BLOB)')
         self.connection.commit()

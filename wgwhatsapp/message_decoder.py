@@ -11,7 +11,7 @@ from wgcore.message.vcardmessage import VCardMessage
 logger = logging.getLogger(__name__)
 
 
-def decode_raw_whasapp_message(self, message):
+def decode_raw_whasapp_message(message):
     """
     Decodes message
     :param message: raw message
@@ -40,8 +40,8 @@ def decode_raw_whasapp_message(self, message):
                              message.getId(), sender, group)
             logger.error('Unknown media type {} for message {} '.format(message.getMediaType(), message))
     else:
-        result = mess.Message('Unknown message type: {}'.format(message.getType()), message_date, message.getId(),
-                              sender, group)
+        result = Message('Unknown message type: {}'.format(message.getType()), message_date, message.getId(), sender,
+                         group)
         logger.error('Unknown message type {} for message {} '.format(message.getType(), message))
 
     return result

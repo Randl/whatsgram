@@ -1,7 +1,7 @@
 import logging
 
 from wgcore.phonenumber_parse import get_cc_and_number
-from wgwhatsapp.wa_registration import register, requestCode
+from wgwhatsapp.wa_registration import registerWA, requestCodeWA
 from wgwhatsapp.wabot import WABot
 
 # Enable logging
@@ -18,9 +18,9 @@ with open('config', 'r') as config_file:
 def test_reg(method='sms'):
     country_code = get_cc_and_number('+' + config['whatsupnum'])
     logger.info('Code requesting for cc {}, number {}'.format(country_code[0], country_code[1]))
-    requestCode(country_code[0], country_code[1], method)
+    requestCodeWA(country_code[0], country_code[1], method)
     code = input('Please enter the code: ')
-    config['whatsuppass'] = register(country_code[0], country_code[1], code)
+    config['whatsuppass'] = registerWA(country_code[0], country_code[1], code)
 
 
 def test_bot():

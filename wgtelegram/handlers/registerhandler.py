@@ -4,7 +4,7 @@ from telegram import (ReplyKeyboardMarkup, ParseMode)  # pip install python-tele
 from telegram.ext import (CommandHandler, MessageHandler, Filters, ConversationHandler, RegexHandler)
 
 from wgcore.phonenumber_parse import get_cc_and_number
-from wgwhatsapp.wa_registration import requestCode, register
+from wgwhatsapp.wa_registration import requestCodeWA, registerWA
 
 # temporary workaround for localization
 _ = lambda x: x
@@ -12,6 +12,7 @@ _ = lambda x: x
 PHONE_NUMBER, PREFIX_CONFIRM, PREFIX_MANUAL, CONFIRMATION_CODE = range(4)
 
 logger = logging.getLogger(__name__)
+
 
 def createHandler():
     conv_handler = ConversationHandler(entry_points=[CommandHandler('register', register)],
@@ -22,7 +23,7 @@ def createHandler():
                                                CONFIRMATION_CODE: [MessageHandler([Filters.text], confirmation_code)]},
 
                                        fallbacks=[CommandHandler('cancel', cancel)])
-    return conv_handler;
+    return conv_handler
 
 
 ####################
@@ -35,6 +36,7 @@ def cancel(bot, update):
     bot.sendMessage(update.message.chat_id, text='Bye! I hope we can talk again some day.')
 
     return ConversationHandler.END
+
 
 def register(bot, update):
     user = update.message.from_user
@@ -51,6 +53,8 @@ def register(bot, update):
 
 country_code = ''
 phonenum = ''
+
+
 def phone_number(bot, update):
     user = update.message.from_user
     global phonenum  # TODO: db
@@ -72,14 +76,14 @@ def phone_number(bot, update):
 
 def prefix_confirm(bot, update):
     user = update.message.from_user
-    if (update.message.text == 'Yes'):
+    if update.message.text == 'Yes':
         logger.info('Prefix of user {} confirmed: {}'.format(user.id, country_code))
 
         bot.sendMessage(update.message.chat_id, text='Now please give me a confirmation code, so I can '
                                                      'log into your WhatsApp account. If you haven\'t got one '
                                                      'please type /retry . You can try voice activation '
                                                      'instead of sms as well by typing /voice')  # TODO: retry, voice
-        requestCode(country_code, phonenum)
+        requestCodeWA(country_code, phonenum)
         return CONFIRMATION_CODE
     else:
         logger.warning('Country code of user {} is wrong. Number: {}'.format(user.id, country_code, phonenum))
@@ -93,10 +97,11 @@ def prefix_manual(bot, update):
     country_code = update.message.text
     logger.info('Prefix of user {} is {}'.format(user.id, country_code))
 
-    requestCode(country_code, phonenum)  # TODO: error handling
+    requestCodeWA(country_code, phonenum)  # TODO: error handling
     bot.sendMessage(update.message.chat_id, text='Now please give me a confirmation code, so I can '
                                                  'log into your WhatsApp account.')
     return CONFIRMATION_CODE
+
 
 def confirmation_code(bot, update):
     user = update.message.from_user
@@ -104,7 +109,7 @@ def confirmation_code(bot, update):
     logger.info('Confirmation code of user {}: {}'.format(user.id, code))
     code = code.replace('-', '')
     if len(code) == 6 and code.isdigit():
-        register(country_code, phonenum, code)
+        registerWA(country_code, phonenum, code)
         bot.sendMessage(update.message.chat_id, text='Thank you! Now you can start using me.')
 
         return ConversationHandler.END

@@ -6,6 +6,7 @@ from wgtelegram.handlers import (registerhandler, starthandler)
 
 logger = logging.getLogger(__name__)
 
+
 class TGBot:
     def __init__(self, token):
         # Create the EventHandler and pass it your bot's token.
@@ -24,7 +25,7 @@ class TGBot:
         try:
             logger.info('Registering handlers...')
 
-            #register all handlers (TODO: make dynamic)
+            # register all handlers (TODO: make dynamic)
             self.dispatcher.add_handler(starthandler.createHandler())
             self.dispatcher.add_handler(registerhandler.createHandler())
 
