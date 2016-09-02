@@ -61,7 +61,7 @@ class DBInterface:
             blob = pickle.dumps(message.vcard, pickle.HIGHEST_PROTOCOL)
         elif message is LocationMessage:
             type = 'location'
-            blob = pickle.dumps((message.longitude, message.latitude), pickle.HIGHEST_PROTOCOL)
+            blob = pickle.dumps((message.latitude, message.longitude), pickle.HIGHEST_PROTOCOL)
         else:
             type = 'text'
             blob = None

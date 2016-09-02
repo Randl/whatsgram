@@ -1,6 +1,8 @@
 import logging
+import time
 
 from wgcore.phonenumber_parse import get_cc_and_number
+from wgwhatsapp.message_decoder import decode_raw_whasapp_message
 from wgwhatsapp.wa_registration import registerWA, requestCodeWA
 from wgwhatsapp.wabot import WABot
 
@@ -25,6 +27,15 @@ def test_reg(method='sms'):
 
 def test_bot():
     bot = WABot(config['whatsupnum'], config['whatsuppass'], True)
+    bot.start()
+    time.sleep(30)
+    x = bot.get_messages()
+    m_list = []
+    for message in x:
+        m_list.append(decode_raw_whasapp_message(message))
+    print(m_list)
+
+
 
 
 # test_reg()

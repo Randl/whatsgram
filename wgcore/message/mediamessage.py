@@ -15,3 +15,17 @@ class MediaMessage(Message):
         self.media_type = media_type
         self.media_size = media_size
         self.media_url = media_url
+
+    def __str__(self):
+        return 'Media message {} send on {} from {} in coversation {}:\n{}\n{} of size {} in {}'.format(self.id,
+                                                                                                        self.date,
+                                                                                                        self.sender,
+                                                                                                        self.conversation,
+                                                                                                        self.text,
+                                                                                                        self.media_type,
+                                                                                                        self.media_size,
+                                                                                                        self.media_url)
+
+    def __repr__(self):
+        return str((self.id, self.date, self.sender, self.conversation, self.text, self.media_type, self.media_size,
+                    self.media_url))

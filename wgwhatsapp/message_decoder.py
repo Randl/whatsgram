@@ -34,7 +34,7 @@ def decode_raw_whasapp_message(message):
                                   message.getCardData())
         elif message.getMediaType() == 'location':
             result = LocationMessage(message.getBody(), message_date, message.getId(), sender, group,
-                                     message.getLongitude(), message.getLatitude())
+                                     message.getLatitude(), message.getLongitude())
         else:
             result = Message('Unknown media type: {}'.format(message.getMediaType()), message_date,
                              message.getId(), sender, group)
